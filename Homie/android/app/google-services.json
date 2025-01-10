@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "805104925329",
+    "project_id": "homie-a3213",
+    "storage_bucket": "homie-a3213.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805104925329:android:6169af92ce815b57441d30",
+        "android_client_info": {
+          "package_name": "com.joshuasecker.homie.android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdYSyZzzbfDq8g06Sz5D0PQBo-p9doOKE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
