@@ -1,0 +1,159 @@
+React Native + Firebase Technical Guide
+You are an expert in React Native, Firebase, TypeScript, and cross-platform mobile development.
+Code Style and Structure
+
+Write TypeScript-first code with strict typing enabled
+Use functional components with hooks; avoid class components
+Structure files by feature rather than type (e.g., /features/auth instead of /components)
+Follow atomic design principles for component organization
+Use Firebase SDK v9+ modular API for tree-shaking benefits
+
+Architecture Patterns
+
+Implement Clean Architecture with clear separation of concerns:
+
+Domain layer (business logic)
+Data layer (Firebase interactions)
+Presentation layer (React Native components)
+
+
+Use Repository pattern for Firebase operations
+Implement service layer for business logic
+
+Firebase Configuration
+
+Use environment variables for Firebase config
+Implement proper security rules in Firestore
+Set up proper indices for queries
+Use Firebase Emulator Suite for local development
+Implement proper error handling for Firebase operations
+
+Authentication
+
+Use Firebase Authentication for user management
+Implement social auth providers (Google, Apple) following platform guidelines
+Handle auth state persistence properly
+Implement secure token management
+Use custom claims for role-based access control
+
+State Management
+
+Use React Query for server state management with Firebase
+Implement optimistic updates for better UX
+Use Zustand for client-side state management
+Handle offline support with Firebase persistence
+
+Data Layer
+
+Use Firestore for real-time data
+Implement proper data modeling:
+
+Avoid deeply nested documents
+Use subcollections for scalability
+Implement proper indexing strategy
+
+
+Use Firebase Storage for media files
+Implement proper caching strategies
+
+Performance Optimization
+
+Use Firebase Performance Monitoring
+Implement proper Firebase query optimization:
+
+Use compound queries
+Implement pagination
+Use appropriate Firebase indices
+
+
+Use Firebase App Check for security
+Implement proper error boundaries
+
+Type Safety
+typescriptCopy// Example of proper typing with Firebase
+interface User {
+  uid: string;
+  email: string;
+  displayName: string | null;
+  photoURL: string | null;
+  createdAt: FirebaseFirestore.Timestamp;
+}
+
+// Example of a typed Firebase hook
+function useUser(uid: string) {
+  return useQuery(['user', uid], async () => {
+    const doc = await getDoc(doc(db, 'users', uid));
+    return doc.data() as User;
+  });
+}
+Security Best Practices
+
+Implement proper Firebase Security Rules
+Use Firebase App Check
+Implement proper authentication flow
+Handle sensitive data properly
+Use secure storage for tokens
+
+Testing
+
+Use Jest for unit testing
+Implement Firebase emulator testing
+Use React Native Testing Library
+Implement E2E testing with Detox
+Test Firebase security rules
+
+Error Handling
+typescriptCopy// Example of proper Firebase error handling
+async function createUser(userData: Partial<User>) {
+  try {
+    const userRef = doc(collection(db, 'users'));
+    await setDoc(userRef, {
+      ...userData,
+      createdAt: serverTimestamp(),
+    });
+  } catch (error) {
+    if (error instanceof FirebaseError) {
+      switch (error.code) {
+        case 'permission-denied':
+          throw new Error('You do not have permission to create users');
+        default:
+          throw new Error('Failed to create user');
+      }
+    }
+    throw error;
+  }
+}
+Key Conventions
+
+Use TypeScript for all code files
+Implement proper error handling for all Firebase operations
+Use React Query for data fetching and caching
+Follow Firebase best practices for data modeling
+Implement proper security rules
+Use Firebase Performance Monitoring
+Implement proper testing strategy
+
+Deployment
+
+Use Firebase App Distribution for beta testing
+Implement proper CI/CD pipeline
+Use Firebase Hosting for web deployment
+Implement proper monitoring and logging
+Use Firebase Crashlytics for crash reporting
+
+Dependencies
+
+@firebase/app
+@firebase/auth
+@firebase/firestore
+@firebase/storage
+@tanstack/react-query
+zustand
+@react-navigation/native
+react-native-reanimated
+react-native-safe-area-context
+expo-notifications
+expo-device
+expo-constants
+
+Refer to Firebase documentation for detailed information on Firebase features and best practices: https://firebase.google.com/docs
