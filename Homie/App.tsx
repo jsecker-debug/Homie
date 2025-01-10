@@ -1,41 +1,69 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import auth from '@react-native-firebase/auth';
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 
 import AuthScreen from './src/screens/AuthScreen';
 import HomeScreen from './src/screens/HomeScreen';
 
-const Stack = createNativeStackNavigator();
+// Define the type for our navigation stack parameters
+export type RootStackParamList = {
+  Auth: undefined;
+  Home: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App(): React.JSX.Element {
   const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
 
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged((user) => {
-      setUser(user);
-      if (initializing) setInitializing(false);
+    // Subscribe to authentication state changes
+    const unsubscribe = auth().onAuthStateChanged((userState) => {
+      setUser(userState);
+      if (initializing) {
+        setInitializing(false);
+      }
     });
-    return subscriber;
+
+    // Cleanup subscription on unmount
+    return unsubscribe;
   }, [initializing]);
 
-  if (initializing) return null;
+  // Show nothing while initializing
+  if (initializing) {
+    return <></>;
+  }
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: true,
+          headerBackVisible: false,
+        }}
+      >
         {user ? (
-          <Stack.Screen name="Home" component={HomeScreen} />
+          // User is signed in
+          <Stack.Screen 
+            name="Home" 
+            component={HomeScreen}
+            options={{
+              title: 'Home',
+              headerLeft: () => null,
+            }}
+          />
         ) : (
-          <Stack.Screen name="Auth" component={AuthScreen} />
+          // No user is signed in
+          <Stack.Screen 
+            name="Auth" 
+            component={AuthScreen}
+            options={{
+              title: 'Welcome',
+              headerShown: false,
+            }}
+          />
         )}
       </Stack.Navigator>
     </NavigationContainer>
